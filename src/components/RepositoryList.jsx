@@ -1,36 +1,27 @@
-const repositoryName = 'Gabriel';
+import { RepositoryItem } from "./RepositoryItem";
+import '../styles/repositories.scss';
+import { useState, useEffect } from "react";
 
 export function RepositoryList() {
-    return(
-        <section className="repository-list">
-            <h1>Lista de repositórios</h1>
+  const [repositories, setRepositories] = useState([]);
 
-            <ul>
-                <li>
-                    <strong>{repositoryName}</strong>
-                    <p>Form in React</p>
+  useEffect(() => {
+    fetch('https://api.github.com/orgs/rocketseat/repos')
+    .then(response => response.json())
+    .then(data => setRepositories(data));
+  }, [])
 
-                    <a href="">
-                        Acessar repositório
-                    </a>
-                </li>
-                <li>
-                    <strong>unform</strong>
-                    <p>Form in React</p>
+  return(
+    <section className="repository-list">
+      <h1>Lista de repositórios</h1>
 
-                    <a href="">
-                        Acessar repositório
-                    </a>
-                </li>
-                <li>
-                    <strong>unform</strong>
-                    <p>Form in React</p>
-
-                    <a href="">
-                        Acessar repositório
-                    </a>
-                </li>
-            </ul>
-        </section>
-    )
+      <ul>
+        {repositories.map(repository => {
+          return <RepositoryItem key={repository.name} repository={repository} />
+        })}               
+        
+        
+      </ul>
+    </section>
+  )
 }
